@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:ocr/Screen/recognization_page.dart';
+import 'package:ocr/Utils/backend.dart';
 import 'package:ocr/Utils/image_cropper_page.dart';
 import 'package:ocr/Utils/image_picker_class.dart';
 import 'package:ocr/Widgets/modal_dialog.dart';
@@ -11,6 +12,7 @@ import 'package:ocr/Widgets/modal_dialog.dart';
 void main() {
   runApp(const MyApp());
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -60,10 +62,11 @@ backgroundColor:Colors.blueAccent
               if (value != '') {
                 imageCropperView(value, context).then((value) {
                   if (value != '') {
+                    
                     Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => RecognizePage(
+                        builder: (_) => backend(
                           path: value,
                         ),
                       ),

@@ -1,28 +1,54 @@
+import 'dart:convert';
 import 'dart:developer';
-
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 class RecognizePage extends StatefulWidget {
-  final String? path;
-  const RecognizePage({Key? key, this.path}) : super(key: key);
+  final List<Uint8List> ?imageBytesList;
+
+  const RecognizePage({Key? key, this.imageBytesList}) : super(key: key);
 
   @override
   State<RecognizePage> createState() => _RecognizePageState();
+}  var input_imagesender;
+var input_imagereceiver;
+Future<File> writeBytesToFile(Uint8List imageBytes, String fileName) async {
+  final directory = await getTemporaryDirectory();
+  final file = File('${directory.path}/$fileName.png');
+  await file.writeAsBytes(imageBytes);
+  return file;
 }
 
+// Create an InputImage from the stored bytes
+Future<InputImage> createInputImageFromBytes(Uint8List imageBytes, String fileName) async {
+  final file = await writeBytesToFile(imageBytes, fileName);
+  return InputImage.fromFilePath(file.path);
+}
 class _RecognizePageState extends State<RecognizePage> {
   bool _isBusy = false;
 
-  TextEditingController controller = TextEditingController();
-
+  TextEditingController controller_sender = TextEditingController();
+  TextEditingController controller_receiver = TextEditingController();
+Future<void> someFunction() async {
+InputImage inputImageSender = await createInputImageFromBytes(widget.imageBytesList![0], 'senderImage');
+InputImage inputImagereceiver = await createInputImageFromBytes(widget.imageBytesList![1], 'receiverImage');
+setState(() {
+input_imagesender=inputImageSender;
+input_imagereceiver=inputImagereceiver;
+});
+}
+  
+  
   @override
   void initState() {
     super.initState();
 
-    final InputImage inputImage = InputImage.fromFilePath(widget.path!);
-
-    processImage(inputImage);
+    someFunction();
+    processImage(input_imagesender);
+    processImage(input_imagereceiver);
   }
 
   @override
@@ -33,15 +59,25 @@ class _RecognizePageState extends State<RecognizePage> {
             ? const Center(
                 child: CircularProgressIndicator(),
               )
-            : Container(
-                padding: const EdgeInsets.all(20),
-                child: TextFormField(
-                  maxLines: MediaQuery.of(context).size.height.toInt(),
-                  controller: controller,
-                  decoration:
-                      const InputDecoration(hintText: "Text goes here..."),
-                ),
-              ));
+            : Column(
+              children: [
+                Container(
+                    height: 200,
+                    child: TextFormField(
+                      maxLines: MediaQuery.of(context).size.height.toInt(),
+                      controller: controller_sender,
+                      decoration:
+                          const InputDecoration(hintText: "Sender Text will appear here"),
+                    ),
+                  ),
+                  Container( height: 200,
+                    child: TextFormField(maxLines: MediaQuery.of(context).size.height.toInt(),
+                      controller: controller_receiver,
+                      decoration:
+                          const InputDecoration(hintText: "Receiver text will appear here"),),
+                  )
+              ],
+            ));
   }
 
   void processImage(InputImage image) async {
@@ -52,14 +88,35 @@ class _RecognizePageState extends State<RecognizePage> {
     });
 
     log(image.filePath!);
-    final RecognizedText recognizedText =
+
+    if (path.basename(image.filePath!)=="senderImage.png"){final RecognizedText recognizedText =
         await textRecognizer.processImage(image);
 
-    controller.text = recognizedText.text;
+    controller_sender.text = recognizedText.text;
+
+    ///End busy state
+    setState(() {
+      _isBusy = false;
+    });}
+    else if(path.basename(image.filePath!)=="receiverImage.png"){
+final RecognizedText recognizedText =
+        await textRecognizer.processImage(image);
+
+    controller_receiver.text = recognizedText.text;
+    if(controller_receiver.text==""){
+      controller_receiver.text="Please check image";
+    }
 
     ///End busy state
     setState(() {
       _isBusy = false;
     });
+
+
+    }
+    
   }
 }
+
+
+
