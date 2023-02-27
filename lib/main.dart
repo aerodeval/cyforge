@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:ocr/Screen/SignInPage.dart';
+import 'package:ocr/Screen/documentType.dart';
 import 'package:ocr/Screen/recognization_page.dart';
+import 'package:ocr/Screen/stepper.dart';
 import 'package:ocr/Utils/backend.dart';
 import 'package:ocr/Utils/image_cropper_page.dart';
 import 'package:ocr/Utils/image_picker_class.dart';
@@ -32,8 +35,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({Key? key,required this.title }) : super(key: key);
+ final String title;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -45,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
    
     return Scaffold(
 backgroundColor:Colors.blueAccent
- ,     body: Center(
+ ,     body: Container(
     
         child: Column(
          
@@ -55,35 +58,66 @@ backgroundColor:Colors.blueAccent
     mainAxisAlignment:MainAxisAlignment.center ,
     
     
-    children: [ElevatedButton( child: Text("Generate Report", style: TextStyle(fontSize: 20),) ,onPressed: () {
-          imagePickerModal(context,  onGalleryTap: () {
-            log("Gallery");
-            pickImage(source: ImageSource.gallery).then((value) {
-              if (value != '') {
-                imageCropperView(value, context).then((value) {
-                  if (value != '') {
-                    
-                    Navigator.push(
+    children: [ElevatedButton( child: Text("Generate Report", style: TextStyle(fontSize: 20,),) ,onPressed: () {
+   
+
+
+       Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => backend(
-                          path: value,
-                        ),
-                      ),
-                    );
-                  }
-                });
-              }
-            });
-          });
+                         builder: (_) => documentType()));
+   
+          // imagePickerModal(context,  onGalleryTap: () {
+          //   log("Gallery");
+          //   pickImage(source: ImageSource.gallery).then((value) {
+          //     if (value != '') {
+          //       imageCropperView(value, context).then((value) {
+          //         if (value != '') {
+                    
+          //           Navigator.push(
+          //             context,
+          //             CupertinoPageRoute(
+          //               builder: (_) => backend(
+          //                 path: value,
+          //               ),
+          //             ),
+          //           );
+          //         }
+          //       });
+          //     }
+          //   });
+          // });
         },) ,
         SizedBox(width:10),
 ElevatedButton( child: Text("View Reports", style: TextStyle(fontSize: 20),) ,onPressed: (() => {log("View Reports")}))
 
-      ],)      
+      ],),      
 
+         Padding(
+           padding: const EdgeInsets.only(top:10.0),
+           child: Row( mainAxisAlignment: MainAxisAlignment.end,
+             children: [ 
+              
+               IconButton(iconSize: 90,
+                icon: const Icon(Icons.supervised_user_circle,color: Color.fromARGB(255, 15, 4, 82),),
+               
+                onPressed: () {
+
+
+                     Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => LoginScreen()
+                      ),
+                    );
+                }
+                  ),
+             ],
+           ),
+         ),
           ]
         ),
+        
       ),
 
     );

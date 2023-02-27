@@ -45,10 +45,11 @@ input_imagereceiver=inputImagereceiver;
   @override
   void initState() {
     super.initState();
-
-    someFunction();
-    processImage(input_imagesender);
+ someFunction();
+   
     processImage(input_imagereceiver);
+     processImage(input_imagesender);
+ 
   }
 
   @override
@@ -89,11 +90,14 @@ input_imagereceiver=inputImagereceiver;
 
     log(image.filePath!);
 
-    if (path.basename(image.filePath!)=="senderImage.png"){final RecognizedText recognizedText =
+    if (path.basename(image.filePath!)=="senderImage.png"){
+      final RecognizedText recognizedText =
         await textRecognizer.processImage(image);
 
     controller_sender.text = recognizedText.text;
-
+if(controller_receiver.text==""){
+      controller_receiver.text="Please check image";
+    }
     ///End busy state
     setState(() {
       _isBusy = false;
