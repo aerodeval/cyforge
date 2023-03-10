@@ -37,29 +37,25 @@ class _LoginScreenState extends State<LoginScreen> {
  
   @override
   Widget build(BuildContext context) {
-    return
-    
-  
-
-   
-
-   Container(
+    return Scaffold(body: Container(
         color: Color.fromARGB(176, 99, 8, 184),
      
      
         child: Column(children: [
      
       SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Container(
-                        alignment: Alignment.topLeft,
-                        child: Text("Sign In",
-                            style: GoogleFonts.montserrat(
-                                fontSize: 60,
-                                fontWeight: FontWeight.w700,
-                                color: Color.fromARGB(255, 255, 255, 255)))),
-                  ),
+                
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                          alignment: Alignment.topLeft,
+                          child: Text("Sign In",
+                              style: GoogleFonts.montserrat(
+                                  fontSize: 60,
+                                  fontWeight: FontWeight.w700,
+                                  color: Color.fromARGB(255, 255, 255, 255)))),
+              ),
+              
                   SizedBox(height:50),
                   Container(
                     width: 300,
@@ -121,11 +117,11 @@ class _LoginScreenState extends State<LoginScreen> {
      
                         onPressed: () async{
                        
+   
                       Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  documentType()),
+                MaterialPageRoute(builder: (context) => const stepper()),
               );
-     
                         },
                         child: const Text("Register"),
                       ),
@@ -139,8 +135,13 @@ class _LoginScreenState extends State<LoginScreen> {
          
      
         ],),
-         )]));
-    
+         )]))
+    );
+  
+
+   
+
+   
                 
   }
   

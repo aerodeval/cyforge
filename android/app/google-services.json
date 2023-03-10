@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "532653027464",
+    "project_id": "cyforge-ecaac",
+    "storage_bucket": "cyforge-ecaac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532653027464:android:56da1e8739fe21ebb92f3d",
+        "android_client_info": {
+          "package_name": "com.example.ocr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532653027464-9dbqkc9vh3uoui4k7m8q1mntg4s7atr7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBptmdC_3dIBkv-7qyN-Y5xLuIveYQbqfw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532653027464-9dbqkc9vh3uoui4k7m8q1mntg4s7atr7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

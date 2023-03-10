@@ -11,8 +11,12 @@ import 'package:ocr/Utils/backend.dart';
 import 'package:ocr/Utils/image_cropper_page.dart';
 import 'package:ocr/Utils/image_picker_class.dart';
 import 'package:ocr/Widgets/modal_dialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -95,23 +99,23 @@ ElevatedButton( child: Text("View Reports", style: TextStyle(fontSize: 20),) ,on
 
          Padding(
            padding: const EdgeInsets.only(top:10.0),
-           child: Row( mainAxisAlignment: MainAxisAlignment.end,
+           child: Row( mainAxisAlignment: MainAxisAlignment.center,
              children: [ 
               
-               IconButton(iconSize: 90,
-                icon: const Icon(Icons.supervised_user_circle,color: Color.fromARGB(255, 15, 4, 82),),
+               Align(
+                alignment: Alignment.center,
+                 child: TextButton(   child: Text("Haven't signed in yet? Sign in here", style: TextStyle(color:Color.fromARGB(255, 231, 231, 231)),),             onPressed: () {
                
-                onPressed: () {
-
-
-                     Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (_) => LoginScreen()
-                      ),
-                    );
-                }
-                  ),
+               
+                       Navigator.push(
+                        context,
+                        CupertinoPageRoute(
+                          builder: (_) => LoginScreen()
+                        ),
+                      );
+                  }
+                    ),
+               ),
              ],
            ),
          ),

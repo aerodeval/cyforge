@@ -1,47 +1,41 @@
 class UserModel {
-  String? uid;
+  String? cehNumber;
   String? email;
   String? firstName;
-  String? cname;
+  String? clink;
   String? password;
-  String? utype;
+  String? organization;
   String? pno;
-  String? pdf;
-  String? pic;
-  DateTime? year;
-  UserModel({this.uid,this.year, this.email,this.cname, this.firstName,this.password,this.utype,this.pno,this.pdf,this.pic});
+
+
+
+  UserModel({this.cehNumber, this.email,this.clink, this.firstName,this.password,this.organization,this.pno});
 
 
   // receiving data from server
   factory UserModel.fromMap(map) {
     return UserModel(
-      uid: map['uid'],
+      cehNumber: map['CEH'],
       email: map['email'],
       firstName: map['firstName'],
-      utype: map['userType'],
+      organization: map['organization'],
       password:map['passwordLogin'],
-      cname:map['College'],
+      clink:map['driveLink'],
       pno: map['phone'],
-      pdf:map['pdf'],
-      pic: map['pic'],
-          year: map['year']
-      
     );
   }
 
   // sending data to our server
   Map<String, dynamic> toMap() {
     return {
-      'uid': uid,
+      'CEH': cehNumber,
       'email': email,
       'firstName': firstName,
-      'userType':utype,
+      'organization':organization,
       'passwordLogin':password,
-      'College':cname,
+      'driveLink':clink,
       'phone':pno,
-      'pdf':pdf
-      ,'pic':pic,
-      'year':year
+    
     };
   }
 }
