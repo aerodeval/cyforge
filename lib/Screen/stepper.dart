@@ -561,7 +561,7 @@ SizedBox(height:10),
 
     await firebaseFirestore
         .collection("users")
-        .doc(user.uid)
+        .doc(firstNameEditingController.text)
         .set(userModel.toMap());
     Fluttertoast.showToast(
         msg: "Account created successfully, Please contact admin ");
