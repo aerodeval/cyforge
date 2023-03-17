@@ -1,15 +1,19 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:typed_data';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:ocr/Screen/reportGeneration.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+
+
 class RecognizePage extends StatefulWidget {
   final List<Uint8List> ?imageBytesList;
-
-  const RecognizePage({Key? key, this.imageBytesList}) : super(key: key);
+   final List<String> selectedUtilities;
+  const RecognizePage({Key? key, this.imageBytesList, required this.selectedUtilities}) : super(key: key);
 
   @override
   State<RecognizePage> createState() => _RecognizePageState();
@@ -77,6 +81,13 @@ input_imagereceiver=inputImagereceiver;
                       decoration:
                           const InputDecoration(hintText: "Receiver text will appear here"),),
                   )
+                  ,const Text("Send for report generation"),
+                  ElevatedButton(onPressed: (){ Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (_) => reportGeneration(selectedUtilities: widget.selectedUtilities, controller_receiver: controller_receiver.text,controller_sender: controller_sender.text,),
+      ),
+    );},child: Text("submit"),)
               ],
             ));
   }

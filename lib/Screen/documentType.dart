@@ -23,10 +23,9 @@ import 'package:file_picker/file_picker.dart';
 if (filePath != null) {
  return filePath.files.single.path;
 } else {
-  // Handle the case where the file picker returns a null file path
-}
-  // User canceled the picker
 
+}
+ 
 } 
 
 
@@ -332,7 +331,7 @@ class _documentTypeState extends State<documentType> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => reportGeneration(
-                    selectedUtilities: selectedUtilities
+                    selectedUtilities: selectedUtilities, controller_receiver: 'No data', controller_sender: 'No data',
                   ),
                 ),
               )

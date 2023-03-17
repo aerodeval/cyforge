@@ -9,8 +9,8 @@ import 'package:ocr/Screen/recognization_page.dart';
 
 class testDisplay extends StatefulWidget {
   final List<Uint8List> ?imageBytesList;
-
-  testDisplay({Key? key, @required this.imageBytesList}) : super(key: key);
+   final List<String> selectedUtilities;
+  testDisplay({Key? key, @required this.imageBytesList, required this.selectedUtilities}) : super(key: key);
 
   @override
   _testDisplayState createState() => _testDisplayState();
@@ -41,7 +41,7 @@ class _testDisplayState extends State<testDisplay> {
                 Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => RecognizePage(imageBytesList: widget.imageBytesList),
+                        builder: (_) => RecognizePage(imageBytesList: widget.imageBytesList,selectedUtilities: widget.selectedUtilities,),
                       ),
                     );
             }) , child: Text("peform ocr"))
