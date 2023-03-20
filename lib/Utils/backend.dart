@@ -16,7 +16,12 @@ import 'package:ocr/Utils/testDisplay.dart';
 class backend extends StatefulWidget {
   final String path;
 final List<String> selectedUtilities;
-  const backend({Key? key, required this.path, required this.selectedUtilities}) : super(key: key);
+ final String recognizedText;
+ final List<XFile> imageFileList;
+ 
+
+
+  const backend({Key? key, required this.path, required this.selectedUtilities,required this.recognizedText,required this.imageFileList}) : super(key: key);
   @override
   State<backend> createState() => _backendState();
 }
@@ -57,7 +62,7 @@ class _backendState extends State<backend> {
                         context,
                         CupertinoPageRoute(
                           builder: (_) => testDisplay(
-                            imageBytesList: value,selectedUtilities:widget.selectedUtilities
+                            imageBytesList: value,selectedUtilities:widget.selectedUtilities,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText
                           ),
                         ),
                       );

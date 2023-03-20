@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ocr/Screen/reportGeneration.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -13,12 +14,15 @@ import 'package:path/path.dart' as path;
 class RecognizePage extends StatefulWidget {
   final List<Uint8List> ?imageBytesList;
    final List<String> selectedUtilities;
-  const RecognizePage({Key? key, this.imageBytesList, required this.selectedUtilities}) : super(key: key);
+     final String recognizedText;
+  final List<XFile> imageFileList;
+  const RecognizePage({Key? key, this.imageBytesList, required this.selectedUtilities, required this.recognizedText, required this.imageFileList}) : super(key: key);
 
   @override
   State<RecognizePage> createState() => _RecognizePageState();
 }  var input_imagesender;
 var input_imagereceiver;
+
 Future<File> writeBytesToFile(Uint8List imageBytes, String fileName) async {
   final directory = await getTemporaryDirectory();
   final file = File('${directory.path}/$fileName.png');
@@ -85,7 +89,7 @@ input_imagereceiver=inputImagereceiver;
                   ElevatedButton(onPressed: (){ Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (_) => reportGeneration(selectedUtilities: widget.selectedUtilities, controller_receiver: controller_receiver.text,controller_sender: controller_sender.text,),
+        builder: (_) => reportGeneration(selectedUtilities: widget.selectedUtilities, controller_receiver: controller_receiver.text,controller_sender: controller_sender.text,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText),
       ),
     );},child: Text("submit"),)
               ],

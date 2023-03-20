@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
@@ -19,161 +20,209 @@ import 'package:path/path.dart';
 
 class reportGeneration extends StatefulWidget {
  final ImagePicker _picker = ImagePicker();
- List<XFile>? _imageFileList;
+ List<XFile> imageFileList;
  File? audiofile;
  final List<String> selectedUtilities;
- String? _recognizedText;
+ String recognizedText;
  final String controller_sender;
  final String controller_receiver;
- String? stateofop;
+ 
 
 
-   reportGeneration({required this.selectedUtilities, required this.controller_sender, required this.controller_receiver,});
+   reportGeneration({required this.selectedUtilities, required this.controller_sender, required this.controller_receiver, required this.imageFileList, required this.recognizedText});
   @override
   State<reportGeneration> createState() => _reportGenerationState();
 }
 
 class _reportGenerationState extends State<reportGeneration> {
-  @override
+  @override 
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Selected Utilities'),
       ),
-      body: ListView.builder(
-        itemCount: widget.selectedUtilities.length,
-        itemBuilder: (context, index) { List data=[widget._imageFileList,widget._recognizedText,widget.stateofop];// find fix for this
-         if(widget.selectedUtilities.isNotEmpty){ return
-          
-            
-           Column(
-             children: [
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            ListView.builder(
+              shrinkWrap: true,
               
-             
-               Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: ListTile(
-                  isThreeLine: true,
-                  title: Text(widget.selectedUtilities[index]),
-                  tileColor:data[index] != null ? Colors.green : Colors.red ,
-                 subtitle: Column(  
-                    children: [if(widget.selectedUtilities[index]=="Image")...[
-                      Container( child: widget._imageFileList!=null ? Container(height: 100,
-                    child: GridView.builder(
-                                 gridDelegate:
-                       SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
-                                 itemCount: widget._imageFileList?.length,
-                                 itemBuilder: (BuildContext context, int index) {
-                     return Image.file(File(widget._imageFileList![index].path) );
-                                 },
-                               ),
-                  ) : Text("No Images Selected"),)
-                    ] else if(widget.selectedUtilities[index]=="Audio")...[
-                      widget.audiofile==null ? Text("No audio file selected") : Text(basename(widget.audiofile!.path))
-  ,
-  
-  if(widget._recognizedText!= null)...[Text(widget._recognizedText!)]
-                    ]
-
-                    else if(widget.selectedUtilities[index]=='Chats')...[
-
-                    Row(mainAxisAlignment:MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [Column(
-                        children: [ Text("Sender Message"),
-                          Container(width:120,child: Text(style:( TextStyle(fontSize: 11,) ),widget.controller_sender),),
-                        ],
-                      ),Container(color:Color.fromARGB(86, 64, 65, 64) ,height: 110,width: 1,),Column(
-                        children: [Text("Receiver Message"),
-                          Container(child: Text(style:( TextStyle(fontSize: 11,) ),widget.controller_receiver),),
-                        ],
-                      )],)
-
-                    ]
-                      
-                    ],                  
-                  ),
-                  onTap: () async {      
-                    if(widget.selectedUtilities[index]=='Image'){
-                     
-                   
-               
-               
-                imagePickerModal(context,  onGalleryTap: () async {
-                log("Gallery");
-                try {
-                         final List<XFile> ?pickedFileList = await widget._picker.pickMultiImage(
-                       
-                         );
-                         setState(() {
-                 widget._imageFileList = pickedFileList;
-                         });
-                       } catch (e) {
-                         setState(() {
-                  
-                         });
-                       }
-                    
-                      });
-                    }
-               
-               else if(widget.selectedUtilities[index]=='Audio'){
-               
-        
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['wav'],
-    );
-    if (result != null) {
-    setState(() {
-       widget.audiofile = File(result.files.single.path!);
-    });
-     
-      recognize(result);
+              itemCount: widget.selectedUtilities.length,
+              itemBuilder: (context, index) { 
+            
+      Map<String, dynamic> data = {
+        'Image': widget.imageFileList.isEmpty,
+        'Audio': widget.recognizedText.isEmpty,
+        'Chats': widget.controller_sender=="No data",
+      };
       
-    }
-               }
-               else if(widget.selectedUtilities[index]=='Chats'){
-            widget.stateofop="";
-                   
-                          imagePickerModal(context,  onGalleryTap: () {
-                            
-                  log("Gallery");
-                  pickImage(source: ImageSource.gallery).then((value) {
-                    if (value != '') {
-
-                      imageCropperView(value, context).then((value) {
-                        if (value != '') {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                               builder: (_) => backend(path: value,selectedUtilities:widget.selectedUtilities)
-                              
-                              // RecognizePage(
-                              //   path: value,
-                              // ),
-                            ),
-                          );
-                        }
-                      });
-                    }
-                  });
-                });
-               }
+      
+         
+            // find fix for this
+               if(widget.selectedUtilities.isNotEmpty){ return
+                
+                  
+                 Column(
+                   children: [
                     
-                  },
-                         ),
-               ),  
-             ],
-           );
-        }
-        else {
-           return Container(
-          decoration: BoxDecoration(color: Colors.amberAccent),
-          child: Text("Please select a utility")
-        );
-         }
+                   
+                     Padding(
+                       padding: const EdgeInsets.all(8.0),
+                       child: ListTile(
+                        isThreeLine: true,
+                        title: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(widget.selectedUtilities[index]),
+                        ),
+                        tileColor: data[widget.selectedUtilities[index]]== true ? Colors.red : Colors.green          ,subtitle: 
+                        
+                           Column(  
+                              children: [if(widget.selectedUtilities[index]=="Image")...[
+                                Container(height: 100, child: widget.imageFileList.isEmpty ?  Align(alignment: Alignment.center, child: Text("No Images Selected")): SizedBox(height: 100,
+                              child: GridView.builder(
+                                           gridDelegate:
+                                 SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                                           itemCount: widget.imageFileList.length,
+                                           itemBuilder: (BuildContext context, int index) {
+                               return Image.file(File(widget.imageFileList[index].path) );
+                                           },
+                                         ),
+                            ) )
+                              ] else if(widget.selectedUtilities[index]=="Audio")...[
+                                widget.audiofile==null ? Text("No audio file selected") : Text("Transcribed Audio",style: TextStyle(fontWeight: FontWeight.bold),)
+        ,
         
-        }
+        if(widget.recognizedText!= null)...[Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Text(widget.recognizedText),
+        )]
+                              ]
+      
+                              else if(widget.selectedUtilities[index]=='Chats')...[
+      
+                              Padding(
+                                padding: const EdgeInsets.all(15.0),
+                                child: Row(mainAxisAlignment:MainAxisAlignment.spaceAround,crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [Column(
+                                    children: [ 
+                                     
+                                     Container(decoration: BoxDecoration(borderRadius:  BorderRadius.circular(10),color:Color.fromARGB(255, 235, 252, 4)),   child: Padding(
+                                       padding: const EdgeInsets.all(8.0),
+                                       child: Text("Sender Message"),
+                                     )),
+                                    
+                                      Container(width:150,child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(textAlign:TextAlign.center, style:( TextStyle(fontSize: 11,) ),widget.controller_sender),
+                                      ),),
+                                    ],
+                                  ),Container(color:Color.fromARGB(84, 196, 199, 196) ,height: 150,width: 1,),Column(
+                                    children: [
+                                   
+                                      Container(decoration: BoxDecoration(borderRadius:  BorderRadius.circular(10),color:Color.fromARGB(255, 235, 252, 4)),child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text("Receiver Message"),
+                                      )),
+                                    
+                                      Container(width:150,child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(textAlign:TextAlign.center,style:( TextStyle(fontSize: 11,) ),widget.controller_receiver),
+                                      ),),
+                                    ],
+                                  )],),
+                              )
+      
+                              ]
+                               , 
+                              ],                  
+                            ),    
+      
+                    
+                     
+              
+                   
+                        onTap: () async {      
+                          if(widget.selectedUtilities[index]=='Image'){
+                           
+                         
+                     
+                     
+                      imagePickerModal(context,  onGalleryTap: () async {
+                      log("Gallery");
+                      try {
+                               final List<XFile> ?pickedFileList = await widget._picker.pickMultiImage(
+                             
+                               );
+                               setState(() {
+                       widget.imageFileList = pickedFileList!;
+                               });
+                             } catch (e) {
+                               setState(() {
+                        
+                               });
+                             }
+                          
+                            });
+                          }
+                     
+                     else if(widget.selectedUtilities[index]=='Audio'){
+                     
+              
+          FilePickerResult? result = await FilePicker.platform.pickFiles(
+            type: FileType.custom,
+            allowedExtensions: ['wav'],
+          );
+          if (result != null) {
+          setState(() {
+             widget.audiofile = File(result.files.single.path!);
+          });
+           
+            recognize(result);
+            
+          }
+                     }
+                     else if(widget.selectedUtilities[index]=='Chats'){
+                    
+                                imagePickerModal(context,  onGalleryTap: () {
+                    
+                        log("Gallery");
+                        pickImage(source: ImageSource.gallery).then((value) {
+                          if (value != '') {
+      
+                            imageCropperView(value, context).then((value) {
+                                                    Navigator.push(
+                                  context,
+                                  CupertinoPageRoute(
+                                     builder: (_) => backend(path: value,selectedUtilities:widget.selectedUtilities,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText, )));
+                            });
+                          }
+                        });
+                      
+                       
+                    
+       
+                             
+                      });
+                     }
+                          
+                        },
+                               ),
+                     ),  
+                   ],
+                   
+                 );
+              }
+              else {
+                 return Container(
+                decoration: BoxDecoration(color: Colors.amberAccent),
+                child: Text("Please select a utility")
+              );
+               }
+              
+              }
+            ),  ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.arrow_forward), label:Text("Generate"))
+          ],
+        ),
       ),
     );
   }
@@ -181,7 +230,7 @@ class _reportGenerationState extends State<reportGeneration> {
   void recognize(FilePickerResult wavFile) async {
 
   try {
-     widget._recognizedText= await convertWavFile(wavFile);
+     widget.recognizedText= await convertWavFile(wavFile);
   } catch (e) {
     print('Error converting WAV file: $e');
   }
@@ -190,6 +239,7 @@ class _reportGenerationState extends State<reportGeneration> {
 }
 
 }
+
 
 Future<String> convertWavFile(FilePickerResult wavFile) async {
   var request = http.MultipartRequest('POST', Uri.parse('http://192.168.0.109:5000/convert'));

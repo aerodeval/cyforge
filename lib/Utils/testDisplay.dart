@@ -1,16 +1,20 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'dart:typed_data';
 import 'package:flutter/widgets.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:ocr/Screen/recognization_page.dart';
 
 
 class testDisplay extends StatefulWidget {
   final List<Uint8List> ?imageBytesList;
    final List<String> selectedUtilities;
-  testDisplay({Key? key, @required this.imageBytesList, required this.selectedUtilities}) : super(key: key);
+  final String recognizedText;
+  final List<XFile> imageFileList;
+  testDisplay({Key? key, @required this.imageBytesList, required this.selectedUtilities,required this.recognizedText,required this.imageFileList}) : super(key: key);
 
   @override
   _testDisplayState createState() => _testDisplayState();
@@ -41,7 +45,7 @@ class _testDisplayState extends State<testDisplay> {
                 Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => RecognizePage(imageBytesList: widget.imageBytesList,selectedUtilities: widget.selectedUtilities,),
+                        builder: (_) => RecognizePage(imageBytesList: widget.imageBytesList,selectedUtilities: widget.selectedUtilities,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText),
                       ),
                     );
             }) , child: Text("peform ocr"))

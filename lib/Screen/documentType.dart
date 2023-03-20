@@ -331,7 +331,7 @@ class _documentTypeState extends State<documentType> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => reportGeneration(
-                    selectedUtilities: selectedUtilities, controller_receiver: 'No data', controller_sender: 'No data',
+                    selectedUtilities: selectedUtilities, controller_receiver: 'No data', controller_sender: 'No data', imageFileList: [], recognizedText: '',
                   ),
                 ),
               )
