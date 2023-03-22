@@ -17,12 +17,16 @@ import 'package:firebase_core/firebase_core.dart';
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  runApp( MyApp());
 }
 
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+  
+  @override
+
+
 
   // This widget is the root of your application.
   @override
@@ -46,7 +50,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? _user;
+Future<void> _getCurrentUser() async {
+    final User? currentUser = _auth.currentUser;
+    setState(() {
+      _user = currentUser;
+    });
+  }
+
+   void initState() {
+    super.initState();
+    _getCurrentUser();
+  }
   @override
   Widget build(BuildContext context) {
    
@@ -104,7 +120,11 @@ ElevatedButton( child: Text("View Reports", style: TextStyle(fontSize: 20),) ,on
               
                Align(
                 alignment: Alignment.center,
-                 child: TextButton(   child: Text("Haven't signed in yet? Sign in here", style: TextStyle(color:Color.fromARGB(255, 231, 231, 231)),),             onPressed: () {
+                 child:
+                 
+                 _user == null ?
+                 
+                 TextButton(   child: Text("Haven't signed in yet? Sign in here", style: TextStyle(color:Color.fromARGB(255, 231, 231, 231)),),             onPressed: () {
                
                
                        Navigator.push(
@@ -114,7 +134,7 @@ ElevatedButton( child: Text("View Reports", style: TextStyle(fontSize: 20),) ,on
                         ),
                       );
                   }
-                    ),
+                    ) : Text("Signed in as ${_user!.email}")
                ),
              ],
            ),

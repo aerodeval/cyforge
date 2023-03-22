@@ -14,7 +14,8 @@ class testDisplay extends StatefulWidget {
    final List<String> selectedUtilities;
   final String recognizedText;
   final List<XFile> imageFileList;
-  testDisplay({Key? key, @required this.imageBytesList, required this.selectedUtilities,required this.recognizedText,required this.imageFileList}) : super(key: key);
+  final  Map<String, dynamic>? chatProcessed;
+  testDisplay({Key? key, @required this.imageBytesList, required this.selectedUtilities,required this.recognizedText,required this.imageFileList, this.chatProcessed}) : super(key: key);
 
   @override
   _testDisplayState createState() => _testDisplayState();
@@ -45,7 +46,7 @@ class _testDisplayState extends State<testDisplay> {
                 Navigator.push(
                       context,
                       CupertinoPageRoute(
-                        builder: (_) => RecognizePage(imageBytesList: widget.imageBytesList,selectedUtilities: widget.selectedUtilities,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText),
+                        builder: (_) => RecognizePage(imageBytesList: widget.imageBytesList,selectedUtilities: widget.selectedUtilities,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText,chatProcessed:widget.chatProcessed),
                       ),
                     );
             }) , child: Text("peform ocr"))

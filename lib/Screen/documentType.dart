@@ -264,7 +264,7 @@ class _documentTypeState extends State<documentType> {
                   child: GestureDetector(
                     onTap: () {
                     
-                _toggleSelection('CSV');
+                _toggleSelection('Text');
           
 
                 //           imagePickerModal(context,  onGalleryTap: () {
@@ -297,11 +297,11 @@ class _documentTypeState extends State<documentType> {
                       child: Container( width:80,height:150,decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(10),
                                
-                                  color:  _isSelected('CSV') ? Color.fromARGB(127, 74, 62, 240) : Colors.greenAccent 
+                                  color:  _isSelected('Text') ? Color.fromARGB(127, 74, 62, 240) : Colors.greenAccent 
                                   
                                   ),
                         child: Column(mainAxisAlignment: MainAxisAlignment.center,
-                          children:  [Text("CSV",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20)),
+                          children:  [Text("Text",style: TextStyle(fontWeight:FontWeight.bold,fontSize: 20)),
                         
                          SizedBox( width: 100,height: 100,
                                 child:Image(fit: BoxFit.fitWidth, image: AssetImage(
@@ -332,7 +332,7 @@ class _documentTypeState extends State<documentType> {
                 MaterialPageRoute(
                   builder: (context) => reportGeneration(
                     selectedUtilities: selectedUtilities, controller_receiver: 'No data', controller_sender: 'No data', imageFileList: [], recognizedText: '',
-                  ),
+                 chatProcessed: {}, ),
                 ),
               )
               }

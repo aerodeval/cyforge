@@ -26,15 +26,44 @@ class reportGeneration extends StatefulWidget {
  String recognizedText;
  final String controller_sender;
  final String controller_receiver;
- 
+ File? _csvFile;
+Map<String, dynamic>? chatProcessed;
 
 
-   reportGeneration({required this.selectedUtilities, required this.controller_sender, required this.controller_receiver, required this.imageFileList, required this.recognizedText});
+
+   reportGeneration({required this.selectedUtilities, required this.controller_sender, required this.controller_receiver, required this.imageFileList, required this.recognizedText, this.chatProcessed});
   @override
   State<reportGeneration> createState() => _reportGenerationState();
 }
 
 class _reportGenerationState extends State<reportGeneration> {
+ Future<void> _pickCsvFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['txt'],
+    );
+    if (result != null) {
+      setState(() {
+        widget._csvFile = File(result.files.single.path!);
+      });
+    }
+  }
+
+  Future<void> _sendCsvFile() async {
+    if (widget._csvFile == null) {
+      return;
+    }
+    final url = 'http://192.168.0.109:5000/process_chat';
+    final request = http.MultipartRequest('POST', Uri.parse(url))
+      ..files.add(await http.MultipartFile.fromPath('csv_file', widget._csvFile!.path));
+    final response = await request.send();
+    final responseBody = await response.stream.bytesToString();
+    final processedData = jsonDecode(responseBody);
+    // do something with the processed chat data
+  }
+
+
+
   @override 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +83,7 @@ class _reportGenerationState extends State<reportGeneration> {
         'Image': widget.imageFileList.isEmpty,
         'Audio': widget.recognizedText.isEmpty,
         'Chats': widget.controller_sender=="No data",
+        'Text':widget.chatProcessed!.isEmpty
       };
       
       
@@ -133,7 +163,13 @@ class _reportGenerationState extends State<reportGeneration> {
                               )
       
                               ]
-                               , 
+                               
+
+                                else if(widget.selectedUtilities[index]=='Text')...[
+
+                                    Container(  height:50,child:                                   widget.chatProcessed!.isEmpty ? Text("No text processed") : Text("Text processing succesful",style: TextStyle(fontWeight: FontWeight.bold),)
+,)
+                                ]
                               ],                  
                             ),    
       
@@ -193,7 +229,7 @@ class _reportGenerationState extends State<reportGeneration> {
                                                     Navigator.push(
                                   context,
                                   CupertinoPageRoute(
-                                     builder: (_) => backend(path: value,selectedUtilities:widget.selectedUtilities,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText, )));
+                                     builder: (_) => backend(path: value,selectedUtilities:widget.selectedUtilities,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText,chatProcessed:widget.chatProcessed )));
                             });
                           }
                         });
@@ -203,7 +239,22 @@ class _reportGenerationState extends State<reportGeneration> {
        
                              
                       });
-                     }
+                     }else if(widget.selectedUtilities[index]=='Text'){
+
+  final file = await FilePicker.platform.pickFiles(
+    type: FileType.custom,
+    allowedExtensions: ['txt'],
+  );
+
+  // Send the file to the server and print the response
+  final response = await processTxtFile(file!);
+  setState(() {
+    widget.chatProcessed=response;
+  });
+  print(response);
+
+                         
+          }
                           
                         },
                                ),
@@ -220,7 +271,10 @@ class _reportGenerationState extends State<reportGeneration> {
                }
               
               }
-            ),  ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.arrow_forward), label:Text("Generate"))
+            ),  ElevatedButton.icon(onPressed: (){
+              print(widget.chatProcessed);
+
+            }, icon: Icon(Icons.arrow_forward), label:Text("Generate"))
           ],
         ),
       ),
@@ -240,6 +294,36 @@ class _reportGenerationState extends State<reportGeneration> {
 
 }
 
+
+Future<Map<String, dynamic>> processTxtFile(FilePickerResult file) async {
+  // Get the picked file
+  final path = file.files.single.path!;
+  final fileBytes = File(path).readAsBytesSync();
+
+  // Set up the request
+  final request = http.MultipartRequest(
+    'POST',
+    Uri.parse('http://192.168.0.109:5000/text'),
+  );
+
+  // Add the file to the request
+  request.files.add(
+    http.MultipartFile.fromBytes(
+      'file',
+      fileBytes,
+      filename: file.files.single.name,
+    ),
+  );
+
+  // Send the request and receive the response
+  final response = await request.send();
+
+  // Read the response as a JSON object
+  final responseBody = await response.stream.bytesToString();
+  final responseJson = json.decode(responseBody);
+
+  return responseJson;
+}
 
 Future<String> convertWavFile(FilePickerResult wavFile) async {
   var request = http.MultipartRequest('POST', Uri.parse('http://192.168.0.109:5000/convert'));

@@ -16,7 +16,8 @@ class RecognizePage extends StatefulWidget {
    final List<String> selectedUtilities;
      final String recognizedText;
   final List<XFile> imageFileList;
-  const RecognizePage({Key? key, this.imageBytesList, required this.selectedUtilities, required this.recognizedText, required this.imageFileList}) : super(key: key);
+  final  Map<String, dynamic>? chatProcessed;
+  const RecognizePage({Key? key, this.imageBytesList, required this.selectedUtilities, required this.recognizedText, required this.imageFileList, this.chatProcessed}) : super(key: key);
 
   @override
   State<RecognizePage> createState() => _RecognizePageState();
@@ -89,7 +90,7 @@ input_imagereceiver=inputImagereceiver;
                   ElevatedButton(onPressed: (){ Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (_) => reportGeneration(selectedUtilities: widget.selectedUtilities, controller_receiver: controller_receiver.text,controller_sender: controller_sender.text,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText),
+        builder: (_) => reportGeneration(selectedUtilities: widget.selectedUtilities, controller_receiver: controller_receiver.text,controller_sender: controller_sender.text,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText,chatProcessed:widget.chatProcessed),
       ),
     );},child: Text("submit"),)
               ],
