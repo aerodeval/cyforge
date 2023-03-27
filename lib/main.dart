@@ -13,6 +13,7 @@ import 'package:ocr/Utils/image_picker_class.dart';
 import 'package:ocr/Widgets/modal_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,27 +38,31 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
      
       ),
-      home: const MyHomePage(title: 'CyForge- forensics report generator'),
+      home:  MyHomePage(title: 'CyForge- forensics report generator'),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key,required this.title }) : super(key: key);
+class MyHomePage extends StatefulWidget {    
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user;
+   MyHomePage({Key? key,required this.title, this.user }) : super(key: key);
  final String title;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? _user;
+
 Future<void> _getCurrentUser() async {
-    final User? currentUser = _auth.currentUser;
+    final User? currentUser = widget._auth.currentUser;
     setState(() {
-      _user = currentUser;
+      widget.user = currentUser;
     });
   }
+  Future<void> _signOut() async {
+  await FirebaseAuth.instance.signOut();
+}
 
    void initState() {
     super.initState();
@@ -80,8 +85,8 @@ backgroundColor:Colors.blueAccent
     
     children: [ElevatedButton( child: Text("Generate Report", style: TextStyle(fontSize: 20,),) ,onPressed: () {
    
-
-
+      if(widget.user!=null)
+    {
        Navigator.push(
                       context,
                       CupertinoPageRoute(
@@ -107,9 +112,27 @@ backgroundColor:Colors.blueAccent
           //     }
           //   });
           // });
+    }else{
+      showCupertinoModalPopup(context: context, builder: (context){return AlertDialog(title: Text("Error"),content: Text("Before generating report please ensure you have signed in or created A account and agreed to the terms of service"),);});
+    }
         },) ,
         SizedBox(width:10),
-ElevatedButton( child: Text("View Reports", style: TextStyle(fontSize: 20),) ,onPressed: (() => {log("View Reports")}))
+ElevatedButton( child: Text("View Reports", style: TextStyle(fontSize: 20),) ,onPressed: (() => {log("View Reports"),
+if(widget.user!=null){
+
+}
+else{
+
+  showCupertinoModalPopup(context: context, builder: (context){return AlertDialog(title: Text("Error"),content: Text("Before generating report please ensure you have signed in or created A account and agreed to the terms of service"),);})
+}
+
+
+
+
+
+
+
+}))
 
       ],),      
 
@@ -122,9 +145,12 @@ ElevatedButton( child: Text("View Reports", style: TextStyle(fontSize: 20),) ,on
                 alignment: Alignment.center,
                  child:
                  
-                 _user == null ?
+                 widget.user == null ?
                  
-                 TextButton(   child: Text("Haven't signed in yet? Sign in here", style: TextStyle(color:Color.fromARGB(255, 231, 231, 231)),),             onPressed: () {
+                 TextButton(   child: Container(decoration:BoxDecoration(borderRadius:BorderRadius.circular(10), color: Color.fromARGB(172, 235, 12, 205)) ,child: Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Text("Haven't signed in yet? Sign in here", style: TextStyle(  fontSize: 15,color:Color.fromARGB(255, 255, 255, 255)),),
+                 )),             onPressed: () {
                
                
                        Navigator.push(
@@ -134,7 +160,28 @@ ElevatedButton( child: Text("View Reports", style: TextStyle(fontSize: 20),) ,on
                         ),
                       );
                   }
-                    ) : Text("Signed in as ${_user!.email}")
+                    ) : Column(
+                      children: [Container(
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(10),
+    color: Color.fromARGB(172, 65, 248, 80),
+  ),
+  child: Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: Text("Signed in as ${widget.user!.email ?? "Sign in again?"}"),
+  ),
+),
+ElevatedButton(
+  onPressed: () async {
+    await widget._auth.signOut();
+    setState(() {
+        widget.user = null;
+    });
+  },
+  child: Text('Sign Out'),
+)
+                      ],
+                    )
                ),
              ],
            ),

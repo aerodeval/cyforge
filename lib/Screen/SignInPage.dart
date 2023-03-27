@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:ocr/Screen/documentType.dart';
+import 'package:ocr/main.dart';
 import 'package:provider/provider.dart';
 import 'stepper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,10 +61,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   Container(
                     width: 300,
                     decoration: BoxDecoration(borderRadius:BorderRadius.circular(20),   
-                    color: Colors.white,),
+                    color: Color.fromARGB(255, 255, 255, 255),),
                  
                     child: Column(children: [
+
+                         Image.asset(width: 100,'assets/images/cyforge.png'),
+                
                       TextField(
+
                          
                         controller: emailController,
                         decoration: InputDecoration(
@@ -97,9 +102,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       .signInWithEmailAndPassword(
                           email: emailController.text,
                           password: passwordController.text)
-                      .then((value) {
+                      .then((value) {showDialog(context: context, builder: (context){return AlertDialog(title: Text("Welcome"),content: Text("Login Succesful"),);});
                           log("login");
-                  }).onError((error, stackTrace) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => MyHomePage(
+                                user: value.user,
+                                title:"",
+                                
+                                    // .split("@")
+                                    // .join()
+                                    // .split(".in")
+                                    // .join()
+                                    )));
+
+                  }).onError((error, stackTrace) {showDialog(context: context, builder: (context){return AlertDialog(title: Text("Error in Sign in"),content:Text("${error.toString()
+  }"),);});
                     print("Error ${error.toString()}");
                         
      
