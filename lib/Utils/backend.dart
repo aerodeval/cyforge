@@ -87,7 +87,7 @@ class _backendState extends State<backend> {
 
 Future sendImageToFlask(String imageFile) async {
   final response = await http.post(
-    Uri.parse("http://192.168.0.109:5000/process-image"),
+    Uri.parse("http://192.168.0.110:5000/process-image"),
     headers: {
       'Content-Type': 'application/json',
     },

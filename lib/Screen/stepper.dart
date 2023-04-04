@@ -158,7 +158,7 @@ class _stepperState extends State<stepper> {
         validator: (value) {
           RegExp regex = new RegExp(r'^.{3,}$');
           if (value!.isEmpty) {
-            return ("CEH Certification number cannot be Empty");
+            return ("Identification number cannot be Empty");
           }
           if (!regex.hasMatch(value)) {
             return ("Enter Valid data(Min. 3 Character)");
@@ -172,7 +172,7 @@ class _stepperState extends State<stepper> {
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.account_circle),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "CEH Certification Number",
+          hintText: "Identification Number",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -334,6 +334,7 @@ class _stepperState extends State<stepper> {
                     SizedBox(height: 14),
                     confirmPasswordField,
                  SizedBox(height: 14),
+                 
                     cehNumberField, SizedBox(height: 14),
                     Container( decoration: BoxDecoration(borderRadius:BorderRadius.circular(10) , color: Color.fromARGB(255, 33, 139, 131)),
                       child: Padding(

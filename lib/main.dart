@@ -7,6 +7,7 @@ import 'package:ocr/Screen/SignInPage.dart';
 import 'package:ocr/Screen/documentType.dart';
 import 'package:ocr/Screen/recognization_page.dart';
 import 'package:ocr/Screen/stepper.dart';
+import 'package:ocr/Screen/viewReports.dart';
 import 'package:ocr/Utils/backend.dart';
 import 'package:ocr/Utils/image_cropper_page.dart';
 import 'package:ocr/Utils/image_picker_class.dart';
@@ -50,9 +51,13 @@ class MyHomePage extends StatefulWidget {
  final String title;
   @override
   State<MyHomePage> createState() => _MyHomePageState();
+  
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+
+  
+  
 
 Future<void> _getCurrentUser() async {
     final User? currentUser = widget._auth.currentUser;
@@ -119,7 +124,10 @@ backgroundColor:Colors.blueAccent
         SizedBox(width:10),
 ElevatedButton( child: Text("View Reports", style: TextStyle(fontSize: 20),) ,onPressed: (() => {log("View Reports"),
 if(widget.user!=null){
-
+ Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => ViewReports(userEmail: widget.user!.email!,))),
 }
 else{
 

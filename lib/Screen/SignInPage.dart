@@ -7,6 +7,7 @@ import 'package:ocr/Screen/documentType.dart';
 import 'package:ocr/main.dart';
 import 'package:provider/provider.dart';
 import 'stepper.dart';
+import 'package:lottie/lottie.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 
@@ -152,7 +153,14 @@ class _LoginScreenState extends State<LoginScreen> {
          
      
         ],),
-         )]))
+         )
+         
+           ,Container(
+                  child: Lottie.asset('assets/lottie/cybersecurity.json'),
+                  height: 350,
+                )
+         
+         ]))
     );
   
 
