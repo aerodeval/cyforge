@@ -55,6 +55,7 @@ dependencies:
   flutter_pdfview: ^1.2.9
   http_parser: ^4.0.2
   syncfusion_flutter_pdfviewer: ^21.1.35
+  qr_flutter: ^4.0.0
  
   
 

@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:ocr/Screen/viewReports.dart';
+import 'package:ocr/main.dart';
 import '../Utils/backend.dart';
 import '../Utils/image_cropper_page.dart';
 import '../Utils/image_picker_class.dart';
@@ -21,7 +23,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 final FirebaseAuth auth = FirebaseAuth.instance;
 
 // Get the email of the currently logged in user
-String userEmail = auth.currentUser?.email ?? '';
+
 class reportGeneration extends StatefulWidget {
   
  final ImagePicker _picker = ImagePicker();
@@ -79,6 +81,11 @@ class _reportGenerationState extends State<reportGeneration> {
 
   @override 
   Widget build(BuildContext context) {
+
+    
+      String userEmail = auth.currentUser?.email ?? '';
+  
+
 
     Future<void> sendDataToBackend() async {
   // create a multipart request
@@ -167,6 +174,11 @@ request.fields['email']=userEmail;
             onPressed: () {
               Navigator.of(context).pop();
               sendDataToBackend();
+              Navigator.of(context).popUntil((route) => route.isFirst);
+Navigator.push(
+  context,
+  MaterialPageRoute(builder: (context) => ViewReports(userEmail: userEmail),)
+);
             },
           ),
         ],

@@ -249,25 +249,18 @@ def receive_data():
     # save the document to disk
     document.save(f'{filename}.docx')
     doc_file = f'{filename}.docx'
-    pdf_file = f'{filename}.pdf'
-    for collection_ref in db.collections():
-        if collection_ref.id == email:
-            blob = bucket.blob(doc_file)
-            blob.upload_from_filename(doc_file)
-            blob.make_public()
-            print("your file url", blob.public_url)
-            data = {"fileName": os.path.basename(doc_file), "fileUrl": blob.public_url}
-            db.collection(email).document().set(data)   
-            break
-    else:
-        blob = bucket.blob(doc_file)
-        blob.upload_from_filename(doc_file)
-        blob.make_public()
-        print("your file url", blob.public_url)
-        data = {"fileName": os.path.basename(doc_file), "fileUrl": blob.public_url}
-        db.collection(email).document().set(data)   
+ 
+   
+    blob = bucket.blob(doc_file)
+    blob.upload_from_filename(doc_file)
+    blob.make_public()
+    print("your file url", blob.public_url)
+    data = {"fileName": os.path.basename(doc_file), "fileUrl": blob.public_url}
+    db.collection(email).document().set(data)   
+           
+          
     
-    return send_file( doc_file,as_attachment=True)
+    return "send_file( doc_file,as_attachment=True)"
 
 
 @app.route('/text',methods=['POST'])

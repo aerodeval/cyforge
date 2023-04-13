@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:lottie/lottie.dart';
+import 'package:ocr/Screen/QrCodeScreen.dart';
 import 'package:ocr/Utils/View.dart';
 
 
@@ -68,19 +69,7 @@ final   reports = snapshot.data!.docs;
               return InkWell(
                 child: Row(
                   children: [
-                     Container(
-                                          
-                                        width: 50.0,
-                                        height: 48.0,
-                                        decoration: BoxDecoration(
-                                          
-                                          image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/pdf.png'),
-                                            fit: BoxFit.contain,
-                                          ),
-                                        ),
-                                      ),
+                  
                     Container(
                        decoration: BoxDecoration(
                                           border: Border(
@@ -97,7 +86,28 @@ final   reports = snapshot.data!.docs;
                                           
                                             width:250,
                       
-                      child: Text(fileName)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Text(fileName),
+                      )),
+
+                         Container(
+                                          
+                                        width: 50.0,
+                                        height: 48.0,
+                                        child: IconButton(
+  icon: Icon(Icons.delete),
+   onPressed: () async {
+    print("pro");
+                await FirebaseFirestore.instance
+                    .collection(widget.userEmail)
+                    .doc(reportsdata.id)
+                    .delete();
+                setState(() {
+                  reports.removeAt(index);
+                });}
+),
+                                      ),
                   ],
                 ),
                 onTap: () {
@@ -105,7 +115,7 @@ final   reports = snapshot.data!.docs;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => View(url: fileUrl),
+                      builder: (context) => QrCodeScreen(wordlink: fileUrl,filename: fileName,),
                     ),
                   );
                 },
