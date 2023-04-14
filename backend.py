@@ -237,32 +237,32 @@ def receive_data():
 
     # add the chatProcessed data to the document
     if chat_processed:
-        document.add_paragraph("\nChat Processed by Cyforge : \n\n")
-        document.add_run(chat_processed)
+        processed_chat=document.add_paragraph("\nChat Processed by Cyforge : \n\n")
+        processed_chat.add_run(chat_processed)
         document.add_page_break()
     # else:
         # document.add_paragraph("The chatProcessed variable is not received.")
 
     # add the recognizedText data to the document
     if recognized_text:
-        document.add_paragraph("\n Recognized text from the image : \n\n")
-        document.add_run(recognized_text)
+        text_recognized=document.add_paragraph("\n Recognized text from the image : \n\n")
+        text_recognized.add_run(recognized_text)
         document.add_page_break()
     # else:
     #     document.add_paragraph("The recognizedText variable is not received.")
 
     # add the controller_sender data to the document
     if controller_sender:
-        document.add_paragraph("\n\n\n Sender chat data : \n\n")
-        document.add_run(controller_sender)
+        sender_ctrl=document.add_paragraph("\n\n\n Sender chat data : \n\n")
+        sender_ctrl.add_run(controller_sender)
         document.add_page_break()
     # else:
     #     document.add_paragraph("The controller_sender variable is not received.")
 
     # add the controller_receiver data to the document
     if controller_receiver:
-        document.add_paragraph("\n\n\n Receiver chat data : \n\n")
-        document.add_run(controller_receiver)
+        recv_ctrl=document.add_paragraph("\n\n\n Receiver chat data : \n\n")
+        recv_ctrl.add_run(controller_receiver)
         document.add_page_break()
     # else:
     #     document.add_paragraph("The controller_receiver variable is not received.")
