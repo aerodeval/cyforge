@@ -231,7 +231,7 @@ def receive_data():
         images = data.add_run()
         for i,image_file in enumerate(image_files):
             images.add_picture(f'image_{i}.jpg',width=Inches(4))
-            images.add_run("\n")
+            data.add_run("\n")
 
     document.add_paragraph_break()
 
@@ -239,7 +239,7 @@ def receive_data():
     if chat_processed:
         document.add_paragraph("\nChat Processed by Cyforge : \n\n")
         document.add_run(chat_processed)
-        document.add_paragraph_break()
+        document.add_page_break()
     # else:
         # document.add_paragraph("The chatProcessed variable is not received.")
 
@@ -247,7 +247,7 @@ def receive_data():
     if recognized_text:
         document.add_paragraph("\n Recognized text from the image : \n\n")
         document.add_run(recognized_text)
-        document.add_paragraph_break()
+        document.add_page_break()
     # else:
     #     document.add_paragraph("The recognizedText variable is not received.")
 
@@ -255,7 +255,7 @@ def receive_data():
     if controller_sender:
         document.add_paragraph("\n\n\n Sender chat data : \n\n")
         document.add_run(controller_sender)
-        document.add_paragraph_break()
+        document.add_page_break()
     # else:
     #     document.add_paragraph("The controller_sender variable is not received.")
 
@@ -263,7 +263,7 @@ def receive_data():
     if controller_receiver:
         document.add_paragraph("\n\n\n Receiver chat data : \n\n")
         document.add_run(controller_receiver)
-        document.add_paragraph_break()
+        document.add_page_break()
     # else:
     #     document.add_paragraph("The controller_receiver variable is not received.")
 
