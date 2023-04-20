@@ -1,4 +1,3 @@
-
 import base64
 from io import BytesIO
 import os
@@ -101,7 +100,10 @@ def receive_data():
     controller_receiver = request.form.get('controller_receiver', '')
     filename=request.form.get('filename','')
     email=request.form.get('email','')
-    print(email)
+    officer_name = request.form.get('officer_name','')
+    experience = request.form.get('experience','')
+    organization = request.form.get('organization','')
+    print(officer_name,email)
 
     # create a new Word document
     document =  Document()
@@ -145,7 +147,7 @@ def receive_data():
     paragraph2.add_run('\n\n')
 
 
-    paragraph3 = document.add_paragraph(f"1. Submitted by: \n\n2. Experience: \n\n\nTools/Instruments/Equipments: Cyforge, \n\nSupporting Details: \n\nExamination: \n\n")
+    paragraph3 = document.add_paragraph(f"1. Submitted by: {officer_name} \n\n2. Experience: {experience} \n\n3. Organization: {organization}\n\n\nTools/Instruments/Equipments: Cyforge, \n\nSupporting Details: \n\nExamination: \n\n")
     paragraph3.style = style
     paragraph3.style.font.size = Pt(14)
 
@@ -212,38 +214,59 @@ def receive_data():
     \n\nLoud background noises may be analyzed by a spectrum analyzer and the corresponding frequencies reduced so that these noises are less noticeable.\
     \n\nCompression - Faint sounds in the recording can be boosted by compressing or leveling the signal so that the dynamic range of the material is reduced, making soft sounds more apparent.")
 
+    document.add_page_break()
 
     image_files = request.files.getlist('imageFiles[]')
-    for i, image_file in enumerate(image_files):
-        # save the image file to disk
-        image_file.save(f'image_{i}.jpg')
-        
-        # add the image to the document
-        # document.add_picture(f'image_{i}.jpg', width=Inches(4))
+    set = False if not image_files else True
+
+    if(set):
+        for i, image_file in enumerate(image_files):
+            # save the image file to disk
+            image_file.save(f'image_{i}.jpg')
+
+            # add the image to the document
+            # document.add_picture(f'image_{i}.jpg', width=Inches(4))
+
+        data = document.add_paragraph("\n")
+        data.add_run("Images Found During The Investigation \n\n")
+        images = data.add_run()
+        for i,image_file in enumerate(image_files):
+            images.add_picture(f'image_{i}.jpg',width=Inches(4))
+            data.add_run("\n")
+
+    document.add_page_break()
+
     # add the chatProcessed data to the document
     if chat_processed:
-        document.add_paragraph(chat_processed)
-    else:
-        document.add_paragraph("The chatProcessed variable is not received.")
+        processed_chat=document.add_paragraph("\nChat Processed by Cyforge : \n\n")
+        processed_chat.add_run(chat_processed)
+        document.add_page_break()
+    # else:
+        # document.add_paragraph("The chatProcessed variable is not received.")
 
     # add the recognizedText data to the document
     if recognized_text:
-        document.add_paragraph(recognized_text)
-    else:
-        document.add_paragraph("The recognizedText variable is not received.")
+        text_recognized=document.add_paragraph("\n Recognized text from the Audio : \n\n")
+        text_recognized.add_run(recognized_text)
+        document.add_page_break()
+    # else:
+    #     document.add_paragraph("The recognizedText variable is not received.")
 
     # add the controller_sender data to the document
     if controller_sender:
-        document.add_paragraph(controller_sender)
-    else:
-        document.add_paragraph("The controller_sender variable is not received.")
+        sender_ctrl=document.add_paragraph("\n\n\n Sender chat data : \n\n")
+        sender_ctrl.add_run(controller_sender)
+        document.add_page_break()
+    # else:
+    #     document.add_paragraph("The controller_sender variable is not received.")
 
     # add the controller_receiver data to the document
     if controller_receiver:
-        document.add_paragraph(controller_receiver)
-    else:
-        document.add_paragraph("The controller_receiver variable is not received.")
-    
+        recv_ctrl=document.add_paragraph("\n\n\n Receiver chat data : \n\n")
+        recv_ctrl.add_run(controller_receiver)
+        document.add_page_break()
+    # else:
+    #     document.add_paragraph("The controller_receiver variable is not received.")
 
 
     # save the document to disk
@@ -300,4 +323,3 @@ def process_txt_file():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0')
-

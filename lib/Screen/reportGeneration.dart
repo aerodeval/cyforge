@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,6 +22,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 
 final FirebaseAuth auth = FirebaseAuth.instance;
+FirebaseFirestore firestore = FirebaseFirestore.instance;
+
 
 // Get the email of the currently logged in user
 
@@ -84,10 +87,20 @@ class _reportGenerationState extends State<reportGeneration> {
 
     
       String userEmail = auth.currentUser?.email ?? '';
+       
+      
   
 
 
     Future<void> sendDataToBackend() async {
+       DocumentSnapshot documentSnapshot =await firestore.collection("users").doc(userEmail).get();
+
+  String  username = documentSnapshot.get("firstName");
+  String org=documentSnapshot.get('organization');
+  String exp =documentSnapshot.get('CEH');
+
+ 
+  
   // create a multipart request
       setState(() {
       _isLoading = true;
@@ -107,6 +120,9 @@ request.fields['controller_sender'] = widget.controller_sender;
 // add the receiver name as a field
 request.fields['controller_receiver'] = widget.controller_receiver;
 request.fields['email']=userEmail;
+request.fields['organization']=org;
+request.fields['officer_name']=username;
+ request.fields['experience']=exp;
 
 
   // add each image file as a file 
@@ -174,11 +190,11 @@ request.fields['email']=userEmail;
             onPressed: () {
               Navigator.of(context).pop();
               sendDataToBackend();
-              Navigator.of(context).popUntil((route) => route.isFirst);
-Navigator.push(
-  context,
-  MaterialPageRoute(builder: (context) => ViewReports(userEmail: userEmail),)
-);
+//               Navigator.of(context).popUntil((route) => route.isFirst);
+// Navigator.push(
+//   context,
+//   MaterialPageRoute(builder: (context) => ViewReports(userEmail: userEmail),)
+// );
             },
           ),
         ],

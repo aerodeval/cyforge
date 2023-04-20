@@ -49,7 +49,7 @@ class _testDisplayState extends State<testDisplay> {
                         builder: (_) => RecognizePage(imageBytesList: widget.imageBytesList,selectedUtilities: widget.selectedUtilities,imageFileList:widget.imageFileList,recognizedText: widget.recognizedText,chatProcessed:widget.chatProcessed),
                       ),
                     );
-            }) , child: Text("peform ocr"))
+            }) , child: Text("Peform OCR"))
           ],
         ),
       ),

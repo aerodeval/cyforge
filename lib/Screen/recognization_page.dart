@@ -42,6 +42,8 @@ class _RecognizePageState extends State<RecognizePage> {
   TextEditingController controller_sender = TextEditingController();
   TextEditingController controller_receiver = TextEditingController();
 Future<void> someFunction() async {
+
+
 InputImage inputImageSender = await createInputImageFromBytes(widget.imageBytesList![0], 'senderImage');
 InputImage inputImagereceiver = await createInputImageFromBytes(widget.imageBytesList![1], 'receiverImage');
 setState(() {
@@ -54,6 +56,10 @@ input_imagereceiver=inputImagereceiver;
   @override
   void initState() {
     super.initState();
+    if(widget.imageBytesList==null){
+ Navigator.pop(context);
+}
+
  someFunction();
    
     processImage(input_imagereceiver);

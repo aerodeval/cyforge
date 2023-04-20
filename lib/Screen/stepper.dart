@@ -156,9 +156,9 @@ class _stepperState extends State<stepper> {
         controller: cehNumberEditingController,
         keyboardType: TextInputType.name,
         validator: (value) {
-          RegExp regex = new RegExp(r'^.{3,}$');
+          RegExp regex = new RegExp(r'^.{1,}$');
           if (value!.isEmpty) {
-            return ("Identification number cannot be Empty");
+            return ("Enter Valid Number of years");
           }
           if (!regex.hasMatch(value)) {
             return ("Enter Valid data(Min. 3 Character)");
@@ -172,7 +172,7 @@ class _stepperState extends State<stepper> {
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.account_circle),
           contentPadding: EdgeInsets.fromLTRB(20, 15, 20, 15),
-          hintText: "Identification Number",
+          hintText: "Experience in Years",
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
@@ -334,8 +334,18 @@ class _stepperState extends State<stepper> {
                     SizedBox(height: 14),
                     confirmPasswordField,
                  SizedBox(height: 14),
+                          Row(
+                      
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      
+                      children: [  Text(style:TextStyle(fontSize: 20),"Name of organization"),SizedBox(width: 10,),Tooltip(child: Icon(Icons.info),message: "If you are a Solo Practioner type Solo",   waitDuration: Duration(seconds: 1),  
+                  showDuration: Duration(seconds: 2),  )],),  
+                    
+SizedBox(height:10),
+
+                    
+                    SizedBox(height: 2,),organizationNameField    ,  SizedBox(height: 10,)   ,     
                  
-                    cehNumberField, SizedBox(height: 14),
                     Container( decoration: BoxDecoration(borderRadius:BorderRadius.circular(10) , color: Color.fromARGB(255, 33, 139, 131)),
                       child: Padding(
                         padding: const EdgeInsets.all(10.0),
@@ -378,17 +388,7 @@ class _stepperState extends State<stepper> {
                      Text(style:TextStyle(fontSize: 20),"Please upload proof of Certification(file link)"),
                      SizedBox(height:10),
                      driveLinkField,SizedBox(height:10),
-                     Row(
-                      
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      
-                      children: [  Text(style:TextStyle(fontSize: 20),"Name of organization"),SizedBox(width: 10,),Tooltip(child: Icon(Icons.info),message: "If you are a Solo Practioner type Solo",   waitDuration: Duration(seconds: 1),  
-                  showDuration: Duration(seconds: 2),  )],),  
-                    
-SizedBox(height:10),
-
-                    
-                    SizedBox(height: 2,),organizationNameField                     
+                       cehNumberField, SizedBox(height: 14),
                 
                     ],
 
@@ -562,7 +562,7 @@ SizedBox(height:10),
 
     await firebaseFirestore
         .collection("users")
-        .doc(firstNameEditingController.text)
+        .doc(emailEditingController.text)
         .set(userModel.toMap());
     Fluttertoast.showToast(
         msg: "Account created successfully, Please contact admin ");
