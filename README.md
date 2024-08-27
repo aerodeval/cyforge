@@ -1,6 +1,6 @@
 # Cyforge Cybersec
 
-A new Flutter project.
+Hi, this application is created using Flutter as frontend and using backend api (backend.py) in Flask. For data storage and authentication i've used Firebase so to set up or clone the project please do the required
 
 ## Getting Started
 
